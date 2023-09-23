@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const { token } = require("morgan");
 
 const router = express.Router();
 /*
@@ -23,14 +24,12 @@ router.post("/user/register", async (req, res) => {
 router.post("/user/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findByCredentials(email, password);
 
+    const user = await User.findByCredentials(email, password);
     if (!user) {
-      return res
-        .status(401)
-        .send({
-          error: "User cannot be found. Please check your credentials.",
-        });
+      return res.status(401).send({
+        error: "User cannot be found. Please check your credentials.",
+      });
     }
 
     const token = await user.generateAuthToken();
@@ -45,7 +44,7 @@ router.post("/user/login", async (req, res) => {
 
     res.cookie("access_token", token, options);
 
-    res.status(200).send({ user });
+    res.status(200).json("Successfully logged in.");
   } catch (error) {
     console.log("Error: ", error);
     res.status(400).send(error);
@@ -53,15 +52,15 @@ router.post("/user/login", async (req, res) => {
 });
 
 /*
-  Get cookies
+  Get Token
 */
-router.get("/user/cookie", async (req, res, next) => {
-  const { access_token } = req.cookies;
-  console.log("access token", access_token.length);
-  if (access_token) {
-    return res.status(400).json({ message: "No cookie sotored" });
+router.get("/user/token", auth, async (req, res, next) => {
+  if (!req.user) {
+    return res.status(400).json("Please login.");
+  } else if (req.user.tokens.length >= 1) {
+    return res.status(200).json(req.user.tokens[0]);
   }
-  return res.status(200).json({ message: "Cookie found" });
+  return res.status(400).json("Please login.");
 });
 
 /*
@@ -69,11 +68,20 @@ router.get("/user/cookie", async (req, res, next) => {
 */
 router.post("/user/logout", auth, async (req, res) => {
   try {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token != req.token;
+    const tokens = req.user.tokens;
+
+    const clearTokens = tokens.filter((token) => {
+      token = "";
+      return token;
     });
+
+    req.user.tokens = clearTokens;
+
     await req.user.save();
-    res.send();
+
+    if(req.user.tokens.length <= 0){
+      res.status(400).json("You are no longer signed in.")
+    } 
   } catch (error) {
     res.status(500).send(error);
   }
@@ -84,9 +92,11 @@ router.post("/user/logout", auth, async (req, res) => {
 */
 router.post("/user/me/logoutall", auth, async (req, res) => {
   try {
+    if(req.user.tokens.length <= 0){
+      res.status(400).json("Please login.")
+    }
     req.user.tokens.splice(0, req.user.tokens.length);
     await req.user.save();
-    res.send();
   } catch (error) {
     res.status(500).send(error);
   }
