@@ -13,7 +13,7 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(cors({ origin: true, credentials: true, path: "/" }));
+server.use(cors({ origin: true, credentials: true, path: process.env.USER_REGISTRATION_SERVER }));
 server.use(morgan("tiny"));
 
 server.use(userRouter);
