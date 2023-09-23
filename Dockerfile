@@ -3,7 +3,7 @@ FROM node:18.10-alpine3.15
 # create directory
 WORKDIR /app
 
-ENV PORT 80
+ENV PORT 8080
 # copy package.json and lock into the created app directory
 COPY package*.json ./
 # install dependencies
