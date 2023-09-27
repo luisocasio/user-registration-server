@@ -24,7 +24,7 @@ server.use(morgan("tiny"));
 
 server.use(userRouter);
 
-server.get("/status", (_req, res) => {
+server.get("/", (_req, res) => {
   res.send("This server is up and running!");
 });
 

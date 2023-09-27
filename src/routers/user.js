@@ -1,7 +1,6 @@
 const express = require("express");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
-const { token } = require("morgan");
 
 const router = express.Router();
 /*
@@ -40,7 +39,6 @@ router.post("/user/login", async (req, res) => {
       httpOnly: false, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
-      exposedHeaders: ["set-cookie"],
     };
 
     res.cookie("Cookie", token, options);
