@@ -65,7 +65,7 @@ router.get("/user/token", auth, async (req, res, next) => {
 /*
   Log out user
 */
-router.post("/user/logout", auth, async (req, res) => {
+router.delete("/user/logout", auth, async (req, res) => {
   try {
     const tokens = req.user.tokens;
 
