@@ -36,7 +36,7 @@ router.post("/user/login", async (req, res) => {
     const hr = 360000 + Date.now();
 
     const options = {
-      httpOnly: false, // change to false when ready for production
+      httpOnly: true, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
     };
@@ -78,9 +78,9 @@ router.post("/user/logout", auth, async (req, res) => {
 
     await req.user.save();
 
-    if(req.user.tokens.length <= 0){
-      res.status(200).json("You are no longer signed in.")
-    } 
+    if (req.user.tokens.length <= 0) {
+      res.status(200).json("You are no longer signed in.");
+    }
   } catch (error) {
     res.status(500).send(error);
   }
@@ -91,8 +91,8 @@ router.post("/user/logout", auth, async (req, res) => {
 */
 router.post("/user/me/logoutall", auth, async (req, res) => {
   try {
-    if(req.user.tokens.length <= 0){
-      res.status(400).json("Please login.")
+    if (req.user.tokens.length <= 0) {
+      res.status(400).json("Please login.");
     }
     req.user.tokens.splice(0, req.user.tokens.length);
     await req.user.save();

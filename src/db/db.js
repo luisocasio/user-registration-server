@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 mongoose
   .set("strictQuery", true)
@@ -7,5 +7,5 @@ mongoose
     useUnifiedTopology: true,
   })
   .catch((error) => {
-    console.error(error.message)
-  })
+    console.error(error.message);
+  });

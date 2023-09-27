@@ -13,13 +13,17 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(cors({
-  credentials: true, 
-  origin: ['http://localhost:3001',
-  'https://user-registration-app-six.vercel.app',
-  'https://user-registration-app-six.vercel.app/login',
-  'https://user-registration-app-six.vercel.app/user/login'
-]}));
+server.use(
+  cors({
+    credentials: true,
+    origin: [
+      "http://localhost:3001",
+      "https://user-registration-app-six.vercel.app",
+      "https://user-registration-app-six.vercel.app/login",
+      "https://user-registration-app-six.vercel.app/user/login",
+    ],
+  })
+);
 server.use(morgan("tiny"));
 
 server.use(userRouter);
