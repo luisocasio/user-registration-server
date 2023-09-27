@@ -13,7 +13,7 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(cors({ origin: "https://user-registration-euu9fou3l-fullstackog.vercel.app/", credentials: true, path: "/" }));
+server.use(cors());
 server.use(morgan("tiny"));
 
 server.use(userRouter);
