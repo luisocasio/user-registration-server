@@ -42,7 +42,7 @@ router.post("/user/login", async (req, res) => {
       credentials: true,
     };
 
-    res.cookie("access_token", token, options);
+    res.cookie("Bearer", token, options);
 
     res.status(200).json("Successfully logged in.");
   } catch (error) {
