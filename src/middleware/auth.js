@@ -7,12 +7,10 @@ const auth = async (req, res, next) => {
     const { Cookie } = req.cookies;
 
     const data = jwt.verify(Cookie, process.env.JWT_KEY);
-
     const user = await User.findOne({ _id: data._id });
     
     req.user = user;
-    console.log(req.user.tokens)
-    
+
     next();
   } catch (error) {
     res.status(401).send({ error: "Not authorized to access this resource" });

@@ -36,7 +36,7 @@ router.post("/user/login", async (req, res) => {
     const hr = 360000 + Date.now();
 
     const options = {
-      httpOnly: true, // change to false when ready for production
+      httpOnly: false, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
     };
@@ -57,7 +57,7 @@ router.get("/user/token", auth, async (req, res, next) => {
   if (!req.user) {
     return res.status(400).json("Please login.");
   } else if (req.user.tokens.length >= 1) {
-    return res.status(200).json(req.user.tokens[0]);
+    return res.status(200).json(req.user.tokens[0].token);
   }
   return res.status(400).json("Please login.");
 });
