@@ -40,9 +40,10 @@ router.post("/user/login", async (req, res) => {
       httpOnly: false, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
+      exposedHeaders: ["set-cookie"],
     };
 
-    res.cookie("Bearer", token, options);
+    res.cookie("Cookie", token, options);
 
     res.status(200).json("Successfully logged in.");
   } catch (error) {
@@ -80,7 +81,7 @@ router.post("/user/logout", auth, async (req, res) => {
     await req.user.save();
 
     if(req.user.tokens.length <= 0){
-      res.status(400).json("You are no longer signed in.")
+      res.status(200).json("You are no longer signed in.")
     } 
   } catch (error) {
     res.status(500).send(error);
