@@ -23,12 +23,14 @@ router.post("/user/register", async (req, res) => {
 router.post("/user/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findByCredentials(email, password);
+
     if (!user) {
-      return res.status(401).send({
-        error: "User cannot be found. Please check your credentials.",
-      });
+      return res
+        .status(401)
+        .send({
+          error: "User cannot be found. Please check your credentials.",
+        });
     }
 
     const token = await user.generateAuthToken();
@@ -36,14 +38,15 @@ router.post("/user/login", async (req, res) => {
     const hr = 360000 + Date.now();
 
     const options = {
-      httpOnly: false, // change to false when ready for production
+      httpOnly: true, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
+      expires: new Date(hr)     
     };
 
-    res.cookie("Cookie", token, options);
+    res.cookie("access_token", token, options);
 
-    res.status(200).json("Successfully logged in.");
+    res.status(200).send({ user });
   } catch (error) {
     console.log("Error: ", error);
     res.status(400).send(error);
@@ -51,17 +54,15 @@ router.post("/user/login", async (req, res) => {
 });
 
 /*
-  Get Token
+  Get cookies
 */
-router.get("/user/token", auth, async (req, res, next) => {
-  const currToken = req.user.tokens[0].token
+router.get("/user/cookie", auth, async (req, res, next) => {
+  const { access_token } = req.cookies;
 
-  if (!req.user) {
-    return res.status(400).json("Please login.");
-  } else if (req.user.tokens.length >= 1) {
-    return res.status(200).json(currToken);
+  if (!access_token) {
+    return res.status(400).json({ message: "No cookie sotored" });
   }
-  return res.status(400).json("Please login.");
+  return res.status(200).json({ message: "Cookie found" });
 });
 
 /*
@@ -69,35 +70,11 @@ router.get("/user/token", auth, async (req, res, next) => {
 */
 router.delete("/user/logout", auth, async (req, res) => {
   try {
-    const tokens = req.user.tokens;
-
-    const clearTokens = tokens.filter((token) => {
-      token = "";
-      return token;
-    });
-
-    req.user.tokens = clearTokens;
-
-    await req.user.save();
-
-    if (req.user.tokens.length <= 0) {
-      res.status(200).json("You are no longer signed in.");
-    }
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-/*
-  Log out user from all devices
-*/
-router.post("/user/me/logoutall", auth, async (req, res) => {
-  try {
-    if (req.user.tokens.length <= 0) {
-      res.status(400).json("Please login.");
-    }
     req.user.tokens.splice(0, req.user.tokens.length);
     await req.user.save();
+
+    res.clearCookie("access_token")
+    res.send();
   } catch (error) {
     res.status(500).send(error);
   }

@@ -4,6 +4,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
+const auth = require("../middleware/auth")
 
 const userRouter = require("../routers/user");
 
@@ -13,23 +14,13 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(
-  cors({
-    credentials: true,
-    origin: [
-      "http://localhost:3001",
-      "https://user-registration-app-six.vercel.app",
-      "https://user-registration-app-six.vercel.app/login",
-      "https://user-registration-app-six.vercel.app/user/login",
-      "https://user-registration-app-six.vercel.app/user/logout",
-    ],
-  })
-);
+server.use(cors({ origin: true, credentials: true, path: "/" }));
+
 server.use(morgan("tiny"));
 
 server.use(userRouter);
 
-server.get("/", (_req, res) => {
+server.get("/", auth, (_req, res) => {
   res.send("This server is up and running!");
 });
 
