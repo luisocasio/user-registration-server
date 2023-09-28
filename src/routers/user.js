@@ -26,11 +26,9 @@ router.post("/user/login", async (req, res) => {
     const user = await User.findByCredentials(email, password);
 
     if (!user) {
-      return res
-        .status(401)
-        .send({
-          error: "User cannot be found. Please check your credentials.",
-        });
+      return res.status(401).send({
+        error: "User cannot be found. Please check your credentials.",
+      });
     }
 
     const token = await user.generateAuthToken();
@@ -41,12 +39,12 @@ router.post("/user/login", async (req, res) => {
       httpOnly: false, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
-      expires: new Date(hr)     
+      expires: new Date(hr),
     };
 
     res.cookie("access_token", token, options);
 
-    res.status(200).send({ user });
+    res.status(200).json({ message: "Succesfully logged in." });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -61,6 +59,7 @@ router.get("/user/cookie", auth, async (req, res, next) => {
   if (!access_token) {
     return res.status(400).json({ message: "No cookie sotored" });
   }
+  console.log(req.cookies)
   return res.status(200).json({ message: "Cookie found" });
 });
 
@@ -72,8 +71,8 @@ router.post("/user/logout", auth, async (req, res) => {
     req.user.tokens.splice(0, req.user.tokens.length);
     await req.user.save();
 
-    res.clearCookie("access_token")
-    res.status(200).json({ message: "Successfully logged out."});
+    res.clearCookie("access_token");
+    res.status(200).json({ message: "Successfully logged out." });
   } catch (error) {
     res.status(500).send(error);
   }

@@ -10,7 +10,6 @@ const auth = async (req, res, next) => {
     const user = await User.findOne({ _id: data._id });
 
     req.user = user
-    req.token = access_token
     
     next();
   } catch (error) {
