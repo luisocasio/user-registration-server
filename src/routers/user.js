@@ -44,7 +44,7 @@ router.post("/user/login", async (req, res) => {
 
     res.cookie("access_token", token, options);
 
-    res.status(200).json({ message: "Succesfully logged in." });
+    res.status(200).send({name:`${user.name}`});
   } catch (error) {
     res.status(400).send(error);
   }
