@@ -38,7 +38,7 @@ router.post("/user/login", async (req, res) => {
     const hr = 360000 + Date.now();
 
     const options = {
-      httpOnly: true, // change to false when ready for production
+      httpOnly: false, // change to false when ready for production
       secure: false, // change to false when ready for production
       credentials: true,
       expires: new Date(hr)     
