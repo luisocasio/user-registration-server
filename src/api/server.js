@@ -4,7 +4,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
-const auth = require("../middleware/auth")
+const auth = require("../middleware/auth");
 
 const userRouter = require("../routers/user");
 
@@ -14,7 +14,18 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(cors({ origin: true, credentials: true, path: "/" }));
+server.use(
+  cors({
+    origin: [
+      "http://localhost:3001",
+      "https://user-registration-app-six.vercel.app",
+      "https://user-registration-app-six.vercel.app/login",
+      "https://user-registration-app-six.vercel.app/user/login",
+    ],
+    credentials: true,
+    path: "/",
+  })
+);
 
 server.use(morgan("tiny"));
 
