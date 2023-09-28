@@ -59,8 +59,7 @@ router.get("/user/cookie", auth, async (req, res, next) => {
   if (!access_token) {
     return res.status(400).json({ message: "No cookie sotored" });
   }
-  console.log(req.cookies)
-  return res.status(200).json({ message: "Cookie found" });
+  return res.status(200).json(`${req.cookies.access_token}`);
 });
 
 /*
