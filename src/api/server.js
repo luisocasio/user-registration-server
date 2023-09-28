@@ -21,7 +21,7 @@ server.use(
       "https://user-registration-app-six.vercel.app",
       "https://user-registration-app-six.vercel.app/login",
       "https://user-registration-app-six.vercel.app/user/login",
-      "https://user-registration-app-six.vercel.app/user/logout"
+      "https://user-registration-app-six.vercel.app/user/logout",
     ],
     credentials: true,
     path: "/",
@@ -33,7 +33,7 @@ server.use(morgan("tiny"));
 server.use(userRouter);
 
 server.get("/", auth, (_req, res) => {
-  res.send("This server is up and running!");
+  res.status(200).send("This server is up and running!");
 });
 
 server.listen(PORT, () => {
