@@ -68,7 +68,7 @@ router.get("/user/cookie", auth, async (req, res, next) => {
 /*
   Log out user
 */
-router.delete("/user/logout", auth, async (req, res) => {
+router.post("/user/logout", auth, async (req, res) => {
   try {
     req.user.tokens.splice(0, req.user.tokens.length);
     await req.user.save();
