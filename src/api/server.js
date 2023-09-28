@@ -14,7 +14,7 @@ const server = express();
 server.use(express.json());
 
 server.use(cookieParser());
-server.use(cors({ origin: "*", credentials: true, path: "/" }));
+server.use(cors({ origin: true, credentials: true, path: "/" }));
 
 server.use(morgan("tiny"));
 
