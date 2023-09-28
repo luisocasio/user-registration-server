@@ -48,7 +48,6 @@ router.post("/user/login", async (req, res) => {
 
     res.status(200).send({ user });
   } catch (error) {
-    console.log("Error: ", error);
     res.status(400).send(error);
   }
 });
@@ -74,7 +73,7 @@ router.post("/user/logout", auth, async (req, res) => {
     await req.user.save();
 
     res.clearCookie("access_token")
-    res.send();
+    res.status(200).json({ message: "Successfully logged out."});
   } catch (error) {
     res.status(500).send(error);
   }
