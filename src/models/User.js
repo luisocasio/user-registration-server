@@ -53,8 +53,13 @@ userSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
   const user = this;
   const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
-  user.tokens = user.tokens.concat({ token });
-  await user.save();
+  
+  if(user.tokens.length >= 1){
+    console.log("User already logged in.")
+  } else if (user.tokens.length <= 0) {
+    user.tokens = user.tokens.concat({ token });
+    await user.save();
+  }
   return token;
 };
 

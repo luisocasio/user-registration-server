@@ -54,10 +54,12 @@ router.post("/user/login", async (req, res) => {
   Get Token
 */
 router.get("/user/token", auth, async (req, res, next) => {
+  const currToken = req.user.tokens[0].token
+
   if (!req.user) {
     return res.status(400).json("Please login.");
   } else if (req.user.tokens.length >= 1) {
-    return res.status(200).json(req.user.tokens[0].token);
+    return res.status(200).json(currToken);
   }
   return res.status(400).json("Please login.");
 });
