@@ -16,14 +16,7 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(
   cors({
-    origin: [
-      "http://localhost:3001",
-      "https://user-registration-app-six.vercel.app",
-      "https://user-registration-app-six.vercel.app/login",
-      "https://user-registration-app-six.vercel.app/user/login",
-      "https://user-registration-app-six.vercel.app/user/logout",
-      "https://user-registration-server.onrender.com/user/login"
-    ],
+    origin: true,
     credentials: true,
     path: "/",
   })
