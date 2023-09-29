@@ -70,8 +70,8 @@ router.post("/user/logout", auth, async (req, res) => {
     req.user.tokens.splice(0, req.user.tokens.length);
     localStorage.removeItem("myName")
     res.clearCookie("access_token");
-    res.status(200).json({ message: "Successfully logged out." });
     await req.user.save();
+    res.status(200).json({ message: "Successfully logged out." });
   } catch (error) {
     res.status(500).send(error);
   }
