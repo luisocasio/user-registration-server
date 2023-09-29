@@ -68,10 +68,10 @@ router.get("/user/cookie", auth, async (req, res, next) => {
 router.post("/user/logout", auth, async (req, res) => {
   try {
     req.user.tokens.splice(0, req.user.tokens.length);
-    await req.user.save();
-
+    localStorage.removeItem("myName")
     res.clearCookie("access_token");
     res.status(200).json({ message: "Successfully logged out." });
+    await req.user.save();
   } catch (error) {
     res.status(500).send(error);
   }
